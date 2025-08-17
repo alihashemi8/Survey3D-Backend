@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+import os
 
 # ------------------------
 # محیط: local یا production
@@ -91,14 +92,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # ------------------------
-# Database
+# Database (پیش‌فرض برای build)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
+        'NAME': config('DB_NAME', default='surveydb'),
+        'USER': config('DB_USER', default='liarauser'),
+        'PASSWORD': config('DB_PASSWORD', default='liarapass'),
+        'HOST': config('DB_HOST', default='survey-db'),
         'PORT': config('DB_PORT', default='5432'),
     }
 }
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------
 # Localization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
 USE_TZ = True
 
@@ -130,10 +131,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# Email (پیش‌فرض برای build)
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
 EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+
+# ------------------------
+# محیط متغیرها را برای Liara روی runtime بخوان
+# (اگر ENV VAR در لیارا موجود باشد، مقادیر واقعی جایگزین پیش‌فرض‌ها می‌شوند)
