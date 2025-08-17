@@ -1,9 +1,13 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-from decouple import config
+
 # ------------------------
-# API Keys
+# محیط: local یا production
+ENVIRONMENT = config("ENVIRONMENT", default="local")
+
+# ------------------------
+# کلیدهای API
 OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
 
 # ------------------------
@@ -23,14 +27,13 @@ SIMPLE_JWT = {
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-key")
-
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DEBUG", default=(ENVIRONMENT=="local"), cast=bool)
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    config("LIARA_APP_DOMAIN", default=""),   # دامنه پروژه روی لیارا
-    config("CUSTOM_DOMAIN", default=""),      # اگر دامنه اختصاصی وصل کردی
+    "survey-backend.liara.run",
+    "survey-ce.liara.run",
 ]
 
 # ------------------------
@@ -59,15 +62,13 @@ MIDDLEWARE = [
 ]
 
 # ------------------------
-# CORS Settings
-CORS_ALLOW_ALL_ORIGINS = False
+# CORS
+CORS_ALLOW_ALL_ORIGINS = ENVIRONMENT=="local"
 CORS_ALLOW_CREDENTIALS = True
-
-# پایه لیست Origins
 CORS_ALLOWED_ORIGINS = [
     "https://survey-ce.liara.run",
+    "https://survey-backend.liara.run",
 ]
-
 
 # ------------------------
 ROOT_URLCONF = 'config.urls'
@@ -90,7 +91,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # ------------------------
-# Database (Postgres روی لیارا)
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -103,6 +104,7 @@ DATABASES = {
 }
 
 # ------------------------
+# اعتبارسنجی رمز عبور
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -110,6 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# ------------------------
+# Localization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -126,7 +130,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------
-# Email Config (میلچی یا جیمیل)
+# Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
