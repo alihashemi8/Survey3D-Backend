@@ -64,7 +64,7 @@ MIDDLEWARE = [
 
 # ------------------------
 # CORS
-CORS_ALLOW_ALL_ORIGINS = ENVIRONMENT=="local"
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://survey-ce.liara.run",

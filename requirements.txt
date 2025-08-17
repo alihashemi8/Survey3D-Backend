@@ -3,7 +3,8 @@ djangorestframework>=3.14
 python-dotenv>=1.0.0
 requests>=2.31.0
 openai>=1.3.5
-python-decouple
-django-cors-headers
-psycopg2-binary
 gunicorn
+djangorestframework-simplejwt>=6.1
+django-cors-headers>=4.0
+psycopg2-binary>=2.9
+python-decouple>=3.8
