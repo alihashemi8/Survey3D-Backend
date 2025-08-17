@@ -65,20 +65,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 # پایه لیست Origins
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173",
     "https://survey-ce.liara.run",
 ]
 
-# اضافه کردن دامین‌های اختیاری فقط اگر مقدار تعریف شده باشه
-liara_domain = config('LIARA_APP_DOMAIN', default=None)
-custom_domain = config('CUSTOM_DOMAIN', default=None)
-
-if liara_domain:
-    CORS_ALLOWED_ORIGINS.append(f"https://{liara_domain}")
-
-if custom_domain:
-    CORS_ALLOWED_ORIGINS.append(f"https://{custom_domain}")
 
 # ------------------------
 ROOT_URLCONF = 'config.urls'
